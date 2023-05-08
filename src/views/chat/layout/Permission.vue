@@ -16,27 +16,33 @@ const authStore = useAuthStore()
 const ms = useMessage()
 
 const loading = ref(false)
-const token = ref('')
+const username = ref('')
+const password = ref('')
 
-const disabled = computed(() => !token.value.trim() || loading.value)
+const disabled = computed(() => !username.value.trim() || !password.value.trim() || loading.value)
+
+async function handelRegister() {
+  window.open('https://www.app4gpt.com/#/register', '_blank')
+}
 
 async function handleVerify() {
-  const secretKey = token.value.trim()
+  const usernameStr = username.value.trim()
+  const passwordStr = password.value.trim()
 
-  if (!secretKey)
+  if (!usernameStr || !passwordStr)
     return
 
   try {
     loading.value = true
-    await fetchVerify(secretKey)
-    authStore.setToken(secretKey)
+    const res: any = await fetchVerify(usernameStr, passwordStr)
+    authStore.setToken(res.data.token)
     ms.success('success')
     window.location.reload()
   }
   catch (error: any) {
     ms.error(error.message ?? 'error')
     authStore.removeToken()
-    token.value = ''
+    username.value = ''
   }
   finally {
     loading.value = false
@@ -64,7 +70,8 @@ function handlePress(event: KeyboardEvent) {
           </p>
           <Icon403 class="w-[200px] m-auto" />
         </header>
-        <NInput v-model:value="token" type="password" placeholder="" @keypress="handlePress" />
+        <NInput v-model:value="username" type="text" placeholder="用户名" />
+        <NInput v-model:value="password" type="password" placeholder="密码" @keypress="handlePress" />
         <NButton
           block
           type="primary"
@@ -72,7 +79,16 @@ function handlePress(event: KeyboardEvent) {
           :loading="loading"
           @click="handleVerify"
         >
-          {{ $t('common.verify') }}
+          登录
+        </NButton>
+        <NButton
+          block
+          type="primary"
+          :disabled="false"
+          :loading="loading"
+          @click="handelRegister"
+        >
+          注册
         </NButton>
       </div>
     </div>
