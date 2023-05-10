@@ -114,19 +114,29 @@ async function onConversation() {
           const xhr = event.target
           const { responseText } = xhr
           // Always process the final line
-          const lastIndex = responseText.lastIndexOf('\n', responseText.length - 2)
-          let chunk = responseText
-          if (lastIndex !== -1)
-            chunk = responseText.substring(lastIndex)
+          // const lastIndex = responseText.lastIndexOf('\n', responseText.length - 2)
+          // let chunk = responseText
+          // if (lastIndex !== -1)
+          //   chunk = responseText.substring(lastIndex)
           try {
-            const data = JSON.parse(chunk)
-            lastText += data.choices[0].delta.content
+            const chunkLine = responseText.split('\n')
+            let data: any
+            let chatText = ''
+            chunkLine.forEach((item: any) => {
+              if (item !== '') {
+                const itemJson = JSON.parse(item)
+                chatText += itemJson.choices[0].delta.content
+                data = itemJson
+                data.text = chatText
+              }
+            })
+            // const data = JSON.parse(chunk)
             updateChat(
               +uuid,
               dataSources.value.length - 1,
               {
                 dateTime: new Date().toLocaleString(),
-                text: lastText,
+                text: lastText + (data.text ?? ''),
                 inversion: false,
                 error: false,
                 loading: true,
