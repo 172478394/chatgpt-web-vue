@@ -20,10 +20,18 @@ export function fetchChatConfig<T = any>() {
   })
 }
 
+export function clearChat<T = any>(uuid?: string) {
+  const data = { uuid }
+  return post<T>({
+    url: '/clearChat',
+    data,
+  })
+}
+
 export function fetchChatAPIProcess<T = any>(
   params: {
     prompt: string
-    options?: { conversationId?: string; parentMessageId?: string }
+    options?: { conversationId?: string; parentMessageId?: string; uuid?: string }
     signal?: GenericAbortSignal
     onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void },
 ) {

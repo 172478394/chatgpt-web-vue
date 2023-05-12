@@ -88,6 +88,7 @@ async function onConversation() {
 
   if (lastContext && usingContext.value)
     options = { ...lastContext }
+  options.uuid = uuid
 
   addChat(
     +uuid,
