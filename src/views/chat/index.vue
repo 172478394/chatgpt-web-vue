@@ -15,6 +15,7 @@ import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAppStore, useChatStore, usePromptStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
+import type { ModelName } from '@/store/modules/app/helper'
 
 let controller = new AbortController()
 
@@ -51,12 +52,12 @@ const modelName = computed({
   get() {
     return appStore.modelName
   },
-  set(value: string) {
+  set(value: ModelName) {
     appStore.setModelName(value)
   },
 })
 
-const modelOptions: { label: string; key: string; value: string }[] = [
+const modelOptions: { label: string; key: string; value: ModelName }[] = [
   { label: 'GPT3.5', key: 'GPT3.5', value: 'gpt-3.5-turbo' },
   { label: 'GPT4', key: 'GPT4', value: 'gpt-4' },
 ]
@@ -559,7 +560,8 @@ onUnmounted(() => {
             </span>
           </HoverButton>
           <NSelect
-            style="width: 140px"
+            v-if="!isMobile"
+            style="width: 120px"
             :value="modelName"
             :options="modelOptions"
             @update-value="value => appStore.setModelName(value)"

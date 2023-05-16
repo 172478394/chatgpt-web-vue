@@ -6,11 +6,13 @@ export type Theme = 'light' | 'dark' | 'auto'
 
 export type Language = 'zh-CN' | 'zh-TW' | 'en-US' | 'ko-KR' | 'ru-RU'
 
+export type ModelName = 'gpt-3.5-turbo' | 'gpt-4'
+
 export interface AppState {
   siderCollapsed: boolean
   theme: Theme
   language: Language
-  modelName: string
+  modelName: ModelName
 }
 
 export function defaultSetting(): AppState {

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { AppState, Language, Theme } from './helper'
+import type { AppState, Language, ModelName, Theme } from './helper'
 import { getLocalSetting, setLocalSetting } from './helper'
 import { store } from '@/store'
 
@@ -23,7 +23,7 @@ export const useAppStore = defineStore('app-store', {
       }
     },
 
-    setModelName(modelName: string) {
+    setModelName(modelName: ModelName) {
       if (this.modelName !== modelName) {
         this.modelName = modelName
         this.recordState()
