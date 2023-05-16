@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { NAutoComplete, NButton, NInput, useDialog, useMessage } from 'naive-ui'
+import { NAutoComplete, NButton, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
@@ -12,7 +12,7 @@ import { useUsingContext } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useChatStore, usePromptStore } from '@/store'
+import { useAppStore, useChatStore, usePromptStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 
@@ -45,6 +45,21 @@ const promptStore = usePromptStore()
 
 // 使用storeToRefs，保证store修改后，联想部分能够重新渲染
 const { promptList: promptTemplate } = storeToRefs<any>(promptStore)
+
+const appStore = useAppStore()
+const modelName = computed({
+  get() {
+    return appStore.modelName
+  },
+  set(value: string) {
+    appStore.setModelName(value)
+  },
+})
+
+const modelOptions: { label: string; key: string; value: string }[] = [
+  { label: 'GPT3.5', key: 'GPT3.5', value: 'gpt-3.5-turbo' },
+  { label: 'GPT4', key: 'GPT4', value: 'gpt-4' },
+]
 
 // 未知原因刷新页面，loading 状态不会重置，手动重置
 dataSources.value.forEach((item, index) => {
@@ -159,6 +174,7 @@ async function onConversation() {
             //
           }
         },
+        modelName: appStore.modelName,
       })
       updateChatSome(+uuid, dataSources.value.length - 1, { loading: false })
     }
@@ -289,6 +305,7 @@ async function onRegenerate(index: number) {
             //
           }
         },
+        modelName: appStore.modelName,
       })
       updateChatSome(+uuid, index, { loading: false })
     }
@@ -541,6 +558,12 @@ onUnmounted(() => {
               <SvgIcon icon="ri:chat-history-line" />
             </span>
           </HoverButton>
+          <NSelect
+            style="width: 140px"
+            :value="modelName"
+            :options="modelOptions"
+            @update-value="value => appStore.setModelName(value)"
+          />
           <NAutoComplete v-model:value="prompt" :options="searchOptions" :render-label="renderOption">
             <template #default="{ handleInput, handleBlur, handleFocus }">
               <NInput

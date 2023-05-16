@@ -23,6 +23,13 @@ export const useAppStore = defineStore('app-store', {
       }
     },
 
+    setModelName(modelName: string) {
+      if (this.modelName !== modelName) {
+        this.modelName = modelName
+        this.recordState()
+      }
+    },
+
     recordState() {
       setLocalSetting(this.$state)
     },

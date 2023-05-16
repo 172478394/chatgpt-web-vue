@@ -10,10 +10,11 @@ export interface AppState {
   siderCollapsed: boolean
   theme: Theme
   language: Language
+  modelName: string
 }
 
 export function defaultSetting(): AppState {
-  return { siderCollapsed: false, theme: 'light', language: 'zh-CN' }
+  return { siderCollapsed: false, theme: 'light', language: 'zh-CN', modelName: 'gpt-3.5-turbo' }
 }
 
 export function getLocalSetting(): AppState {
