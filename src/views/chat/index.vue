@@ -58,7 +58,8 @@ const modelName = computed({
 })
 
 const modelOptions: { label: string; key: string; value: ModelName }[] = [
-  { label: 'GPT3.5', key: 'GPT3.5', value: 'gpt-3.5-turbo' },
+  { label: 'GPT3.5', key: 'GPT3.5', value: 'gpt-3.5-turbo-0613' },
+  { label: 'GPT3.5-16k', key: 'GPT3.5-16k', value: 'gpt-3.5-turbo-16k' },
   { label: 'GPT4', key: 'GPT4', value: 'gpt-4' },
 ]
 
@@ -142,7 +143,8 @@ async function onConversation() {
             chunkLine.forEach((item: any) => {
               if (item !== '') {
                 const itemJson = JSON.parse(item)
-                chatText += itemJson.choices[0].delta.content
+                if (itemJson.choices[0].delta.content)
+                  chatText += itemJson.choices[0].delta.content
                 data = itemJson
                 data.text = chatText
               }
@@ -280,7 +282,8 @@ async function onRegenerate(index: number) {
             chunk = responseText.substring(lastIndex)
           try {
             const data = JSON.parse(chunk)
-            lastText += data.choices[0].delta.content
+            if (data.choices[0].delta.content)
+              lastText += data.choices[0].delta.content
             updateChat(
               +uuid,
               index,
@@ -561,7 +564,7 @@ onUnmounted(() => {
           </HoverButton>
           <NSelect
             v-if="!isMobile"
-            style="width: 120px"
+            style="width: 155px"
             :value="modelName"
             :options="modelOptions"
             @update-value="value => appStore.setModelName(value)"
