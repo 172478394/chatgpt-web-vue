@@ -16,8 +16,8 @@ export function defaultSetting(): UserState {
   return {
     userInfo: {
       avatar: 'https://raw.githubusercontent.com/Chanzhaoyu/chatgpt-web/main/src/assets/avatar.jpg',
-      name: 'app4gpt',
-      description: '官网: <a href="https://www.app4gpt.com" class="text-blue-500" target="_blank" >app4gpt</a>',
+      name: 'chatkore',
+      description: '官网: <a href="https://www.chatkore.com" class="text-blue-500" target="_blank" >chatkore</a>',
     },
   }
 }

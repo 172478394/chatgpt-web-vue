@@ -43,6 +43,7 @@ export default defineConfig((env) => {
         },
       },
     },
+    base: '/chat/',
     build: {
       reportCompressedSize: false,
       sourcemap: false,

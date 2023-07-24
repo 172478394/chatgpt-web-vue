@@ -22,7 +22,7 @@ const password = ref('')
 const disabled = computed(() => !username.value.trim() || !password.value.trim() || loading.value)
 
 async function handelRegister() {
-  window.open('https://www.app4gpt.com/#/register', '_blank')
+  window.open('https://www.chatkore.com/#/register', '_blank')
 }
 
 async function handleVerify() {
